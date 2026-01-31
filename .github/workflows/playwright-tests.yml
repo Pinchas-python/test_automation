@@ -33,30 +33,10 @@ jobs:
     - name: Install Playwright browsers
       run: playwright install chromium
       
-    - name: Check if test site is accessible
-      id: site_check
-      run: |
-        if curl -f -s -o /dev/null -w "%{http_code}" --max-time 10 "https://bpholter.stage.bio-beat.cloud" | grep -q "200\|301\|302"; then
-          echo "site_accessible=true" >> $GITHUB_OUTPUT
-        else
-          echo "site_accessible=false" >> $GITHUB_OUTPUT
-          echo "⚠️ Warning: Test site is not accessible from GitHub Actions"
-        fi
-      continue-on-error: true
-      
     - name: Run tests
-      if: steps.site_check.outputs.site_accessible == 'true'
       run: |
         xvfb-run pytest -v --alluredir=allure-results --browser chromium
       continue-on-error: true
-      
-    - name: Skip tests notice
-      if: steps.site_check.outputs.site_accessible != 'true'
-      run: |
-        echo "⚠️ Skipping tests - Bio-Beat staging site is not accessible from GitHub Actions"
-        echo "Tests can still be run locally or in Docker"
-        mkdir -p allure-results
-        echo '{"name": "Site Accessibility Check", "status": "skipped"}' > allure-results/site-check.json
       
     - name: Get Allure history
       uses: actions/checkout@v4

@@ -3,9 +3,26 @@ Pytest configuration and fixtures
 """
 import pytest
 import os
+import requests
 from playwright.sync_api import Page, BrowserContext
 from config.config import Config
 from datetime import datetime
+
+
+@pytest.fixture(scope="session", autouse=True)
+def check_site_accessibility():
+    """Check if the test site is accessible before running tests"""
+    is_ci = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
+    
+    if is_ci:
+        try:
+            response = requests.get(Config.BASE_URL, timeout=10)
+            if response.status_code not in [200, 301, 302]:
+                pytest.skip(f"Test site {Config.BASE_URL} is not accessible (status: {response.status_code})", allow_module_level=True)
+        except Exception as e:
+            pytest.skip(f"Test site {Config.BASE_URL} is not accessible: {str(e)}", allow_module_level=True)
+    
+    return True
 
 
 @pytest.fixture(scope="session")

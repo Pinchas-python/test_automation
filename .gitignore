@@ -1,0 +1,15 @@
+screenshots/
+videos/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+report.html
+assets/
+.env
+venv/
+env/

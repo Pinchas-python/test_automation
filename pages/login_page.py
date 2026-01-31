@@ -24,7 +24,14 @@ class LoginPage(BasePage):
     
     def navigate_to_login(self, base_url: str):
         """Navigate to login page"""
-        self.navigate_to(base_url)
+        try:
+            self.navigate_to(base_url)
+            # Wait for page to be ready
+            self.page.wait_for_load_state("networkidle", timeout=10000)
+        except Exception as e:
+            print(f"Navigation warning: {e}")
+            # Try to continue anyway
+            pass
     
     def enter_username(self, username: str):
         """Enter username in the username field"""

@@ -2,9 +2,9 @@
 Pytest configuration and fixtures
 """
 import pytest
+import os
 from playwright.sync_api import Page, BrowserContext
 from config.config import Config
-import os
 from datetime import datetime
 
 
@@ -20,9 +20,13 @@ def browser_context_args(browser_context_args):
 @pytest.fixture(scope="session")
 def browser_type_launch_args(browser_type_launch_args):
     """Configure browser launch arguments"""
+    # Force headless mode in CI environments
+    is_ci = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
+    headless = True if is_ci else Config.HEADLESS
+    
     return {
         **browser_type_launch_args,
-        "headless": Config.HEADLESS,
+        "headless": headless,
         "slow_mo": Config.SLOW_MO,
     }
 

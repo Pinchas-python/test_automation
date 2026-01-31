@@ -26,11 +26,11 @@ jobs:
         pip install -r requirements.txt
         
     - name: Install Playwright browsers
-      run: playwright install chromium
+      run: playwright install chromium --with-deps
       
     - name: Run tests
       run: |
-        pytest -v --alluredir=allure-results
+        pytest -v --alluredir=allure-results --browser chromium
       continue-on-error: true
       
     - name: Get Allure history

@@ -52,13 +52,20 @@ class LoginPage(BasePage):
     def is_error_displayed(self) -> bool:
         """Check if error message is visible"""
         try:
-            # Wait a moment for error to appear
-            self.page.wait_for_timeout(1000)
-            # Check for Mui-error class on inputs (Bio-Beat specific)
-            error_elements = self.page.locator(".Mui-error")
-            return error_elements.count() > 0
+            # Wait for error to appear with multiple selectors
+            self.page.wait_for_selector(
+                ".Mui-error, [role='alert'], .error, [class*='error']",
+                timeout=3000,
+                state="visible"
+            )
+            return True
         except:
-            return False
+            # If timeout, check if any error elements exist
+            try:
+                error_elements = self.page.locator(".Mui-error, [role='alert'], .error, [class*='error']")
+                return error_elements.count() > 0
+            except:
+                return False
     
     def is_logged_in(self) -> bool:
         """Check if user is logged in (logout button is visible)"""

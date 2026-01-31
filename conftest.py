@@ -9,20 +9,21 @@ from config.config import Config
 from datetime import datetime
 
 
-@pytest.fixture(scope="session", autouse=True)
-def check_site_accessibility():
-    """Check if the test site is accessible before running tests"""
+def pytest_collection_modifyitems(config, items):
+    """Skip all tests if site is not accessible in CI environment"""
     is_ci = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
     
     if is_ci:
         try:
             response = requests.get(Config.BASE_URL, timeout=10)
             if response.status_code not in [200, 301, 302]:
-                pytest.skip(f"Test site {Config.BASE_URL} is not accessible (status: {response.status_code})", allow_module_level=True)
+                skip_marker = pytest.mark.skip(reason=f"Test site {Config.BASE_URL} is not accessible (HTTP {response.status_code})")
+                for item in items:
+                    item.add_marker(skip_marker)
         except Exception as e:
-            pytest.skip(f"Test site {Config.BASE_URL} is not accessible: {str(e)}", allow_module_level=True)
-    
-    return True
+            skip_marker = pytest.mark.skip(reason=f"Test site {Config.BASE_URL} is not accessible: {str(e)}")
+            for item in items:
+                item.add_marker(skip_marker)
 
 
 @pytest.fixture(scope="session")

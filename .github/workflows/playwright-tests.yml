@@ -31,11 +31,11 @@ jobs:
         sudo apt-get install -y xvfb
         
     - name: Install Playwright browsers
-      run: playwright install chromium
+      run: python -m playwright install --with-deps chromium
       
     - name: Run tests
       run: |
-        xvfb-run pytest -v --alluredir=allure-results --browser chromium
+        xvfb-run python -m pytest -vv --browser chromium --alluredir=allure-results --tracing=retain-on-failure --video=retain-on-failure --screenshot=only-on-failure
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
         VALID_USERNAME: ${{ secrets.VALID_USERNAME }}

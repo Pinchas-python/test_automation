@@ -15,5 +15,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Set the default command to run tests with Playwright
-CMD ["xvfb-run", "--auto-servernum", "--server-args=-screen 0 1280x720x24", "pytest", "-v", "--alluredir=/app/allure-results"]
+CMD ["xvfb-run", "--auto-servernum", "--server-args=-screen 0 1280x720x24", "pytest", "-vv", "--alluredir=/app/allure-results", "--tracing=retain-on-failure", "--video=retain-on-failure", "--screenshot=only-on-failure"]
 

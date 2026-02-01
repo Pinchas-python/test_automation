@@ -4,6 +4,7 @@ Pytest configuration and fixtures
 import pytest
 import os
 import requests
+from urllib.parse import urlparse
 from playwright.sync_api import Page, BrowserContext
 from config.config import Config
 from datetime import datetime
@@ -14,6 +15,12 @@ def pytest_collection_modifyitems(config, items):
     is_ci = os.getenv('CI') == 'true' or os.getenv('GITHUB_ACTIONS') == 'true'
     
     if is_ci:
+        parsed_url = urlparse(Config.BASE_URL or "")
+        if not parsed_url.scheme or not parsed_url.netloc:
+            skip_marker = pytest.mark.skip(reason="Test site is not accessible: BASE_URL is missing or invalid")
+            for item in items:
+                item.add_marker(skip_marker)
+            return
         try:
             response = requests.get(Config.BASE_URL, timeout=10)
             if response.status_code not in [200, 301, 302]:

@@ -35,12 +35,14 @@ jobs:
       
     - name: Run tests
       run: |
-        xvfb-run python -m pytest -vv --browser chromium --alluredir=allure-results --tracing=retain-on-failure --video=retain-on-failure --screenshot=only-on-failure
+        Xvfb :99 -screen 0 1280x720x24 & python -m pytest -vv --browser chromium --alluredir=allure-results --tracing=retain-on-failure --video=retain-on-failure --screenshot=only-on-failure
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
         VALID_USERNAME: ${{ secrets.VALID_USERNAME }}
         VALID_PASSWORD: ${{ secrets.VALID_PASSWORD }}
         HEADLESS: "true"
+        PYTHONUNBUFFERED: "1"
+        DISPLAY: ":99"
       continue-on-error: true
       
     - name: Get Allure history

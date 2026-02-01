@@ -35,7 +35,7 @@ jobs:
       
     - name: Run tests
       run: |
-        Xvfb :99 -screen 0 1280x720x24 & python -m pytest -vv --browser chromium --alluredir=allure-results --tracing=retain-on-failure --video=retain-on-failure --screenshot=only-on-failure
+        Xvfb :99 -screen 0 1280x720x24 & python -m pytest -vv --browser chromium
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
         VALID_USERNAME: ${{ secrets.VALID_USERNAME }}
@@ -43,38 +43,3 @@ jobs:
         HEADLESS: "true"
         PYTHONUNBUFFERED: "1"
         DISPLAY: ":99"
-      continue-on-error: true
-      
-    - name: Get Allure history
-      uses: actions/checkout@v4
-      if: always()
-      continue-on-error: true
-      with:
-        ref: gh-pages
-        path: gh-pages
-        
-    - name: Build Allure report
-      uses: simple-elf/allure-report-action@master
-      if: always()
-      with:
-        allure_results: allure-results
-        allure_history: allure-history
-        keep_reports: 20
-        
-    - name: Deploy Allure report to GitHub Pages
-      if: always()
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: allure-history
-        force_orphan: true
-        allow_empty_commit: true
-        
-    - name: Upload screenshots
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: screenshots
-        path: screenshots/
-        retention-days: 7

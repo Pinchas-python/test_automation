@@ -35,11 +35,13 @@ jobs:
       
     - name: Run tests
       run: |
-        Xvfb :99 -screen 0 1280x720x24 & python -m pytest -vv --browser chromium
-      env:
-        BASE_URL: ${{ secrets.BASE_URL }}
-        VALID_USERNAME: ${{ secrets.VALID_USERNAME }}
-        VALID_PASSWORD: ${{ secrets.VALID_PASSWORD }}
-        HEADLESS: "true"
-        PYTHONUNBUFFERED: "1"
-        DISPLAY: ":99"
+        Xvfb :99 -screen 0 1280x720x24 & python -m pytest -vv --browser chromium --html=report.html --self-contained-html
+
+    - name: Upload test report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: report.html
+        retention-days: 7
+     

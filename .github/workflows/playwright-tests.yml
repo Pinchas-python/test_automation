@@ -36,6 +36,11 @@ jobs:
     - name: Run tests
       run: |
         xvfb-run pytest -v --alluredir=allure-results --browser chromium
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+        VALID_USERNAME: ${{ secrets.VALID_USERNAME }}
+        VALID_PASSWORD: ${{ secrets.VALID_PASSWORD }}
+        HEADLESS: "true"
       continue-on-error: true
       
     - name: Get Allure history

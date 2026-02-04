@@ -1,5 +1,5 @@
 # Use Playwright Docker image
-FROM mcr.microsoft.com/playwright/python:v1.57.0-noble
+FROM mcr.microsoft.com/playwright/python:v1.42.0-jammy
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -15,5 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Set the default command to run tests with Playwright
-CMD ["xvfb-run", "--auto-servernum", "--server-args=-screen 0 1280x720x24", "pytest", "-vv", "--alluredir=/app/allure-results", "--tracing=retain-on-failure", "--video=retain-on-failure", "--screenshot=only-on-failure"]
+ENV PYTHONUNBUFFERED=1
+ENV DISPLAY=:99
+
+CMD ["bash", "-lc", "Xvfb :99 -screen 0 1280x720x24 & pytest -vv --alluredir=/app/allure-results --tracing=retain-on-failure --video=retain-on-failure --screenshot=only-on-failure"]
 

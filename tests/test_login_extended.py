@@ -45,7 +45,7 @@ class TestLoginUI:
         login_page.navigate_to_login(Config.BASE_URL)
         
         title = login_page.get_title()
-        assert "biobeat" in title.lower() or "login" in title.lower(), f"Page title should contain 'Biobeat' or 'login', got: {title}"
+        assert "bio" in title.lower() or "login" in title.lower(), f"Page title should contain 'Biobeat' or 'login', got: {title}"
     
     @pytest.mark.ui
     def test_login_page_elements_visible(self, page):

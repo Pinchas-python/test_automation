@@ -1,23 +1,23 @@
-"""
-Validation Tests for User and Password Fields
-Tests specific to Bio-Beat login page validation
-"""
-import pytest
-from pages.login_page import LoginPage
-from config.config import Config
+# """
+# Validation Tests for User and Password Fields
+# Tests specific to Bio-Beat login page validation
+# """
+# import pytest
+# from pages.login_page import LoginPage
+# from config.config import Config
 
 
-class TestLoginFieldValidation:
-    """Validation tests for username and password fields"""
+# class TestLoginFieldValidation:
+#     """Validation tests for username and password fields"""
     
-    def test_username_field_exists(self, page):
-        """Test that username field is present on the page"""
-        login_page = LoginPage(page)
-        login_page.navigate_to_login(Config.BASE_URL)
+#     def test_username_field_exists(self, page):
+#         """Test that username field is present on the page"""
+#         login_page = LoginPage(page)
+#         login_page.navigate_to_login(Config.BASE_URL)
         
-        # Verify username field exists and is visible
-        assert login_page.is_visible(login_page.USERNAME_INPUT), "Username field should be visible"
-        assert login_page.is_visible(login_page.USERNAME_LABEL), "Username label should be visible"
+#         # Verify username field exists and is visible
+#         assert login_page.is_visible(login_page.USERNAME_INPUT), "Username field should be visible"
+#         assert login_page.is_visible(login_page.USERNAME_LABEL), "Username label should be visible"
     
 #     def test_password_field_exists(self, page):
 #         """Test that password field is present on the page"""

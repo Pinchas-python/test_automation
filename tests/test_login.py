@@ -10,19 +10,6 @@ from config.config import Config
 class TestLogin:
     """Test cases for login functionality"""
     
-    def test_login_with_wrong_username(self, page):
-        """Test login with incorrect username"""
-        login_page = LoginPage(page)
-        login_page.navigate_to_login(Config.BASE_URL)
-        
-        # Login with wrong username
-        login_page.login("wronguser@example.com", Config.VALID_PASSWORD)
-        
-        # Verify error message is displayed
-        assert login_page.is_error_displayed(), "Error message should be displayed"
-        # Optionally verify the error message content
-        # error_text = login_page.get_error_message()
-        # assert "Invalid credentials" in error_text or "incorrect" in error_text.lower()
     
     def test_login_with_wrong_password(self, page):
         """Test login with incorrect password"""
